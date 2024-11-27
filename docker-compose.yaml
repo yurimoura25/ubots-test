@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  api:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_started
+    networks:
+      - support-request-api-network
+    links:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:4.0.4-management
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - support-request-api-network
+networks:
+  support-request-api-network:
+    driver: bridge
